@@ -1,3 +1,3 @@
 # TrackCards
 
-Go app for generating UX cards for music tracks.
+JSON entity reformatter built to handle transformations of JSON inputs to compatible representations of music track “card” objects for the client UX.
