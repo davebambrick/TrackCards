@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+<<<<<<< HEAD
 	simplejson "github.com/bitly/go-simplejson"
 	kz "gopkg.in/qntfy/kazaam.v2"
 	"log"
@@ -42,10 +43,53 @@ type TrackEntity struct {
 	StreamURL      string      `json:"stream_url"`
 	Type           string      `json:"type"`
 	Value          string      `json:"value"`
+=======
+	kz "gopkg.in/qntfy/kazaam.v2"
+  simplejson "github.com/bitly/go-simplejson"
+	"net/http"
+  "log"
+)
+
+type Artist struct {
+  CardToken string `json:"card_token"`
+  ID string `json:"id"`
+  ImageURL string `json:"image"`
+  Name string `json:"name"`
+  Popularity interface{} `json:"popularity"`
+  Type string `json:"type"`
+  Value string `json:"value"`
+}
+
+type Album struct {
+  Artist *Artist `json:"artist"`
+  CardToken string `json:"card_token"`
+  ID string `json:"id"`
+  ImageURL string `json:"image"`
+  Name string `json:"name"`
+  Type string `json:"type"`
+  Value string `json:"value"`
+}
+
+type TrackEntity struct {
+  Album *Album `json:"album"`
+  AliasedFieldId string `json:"aliased_field_id"`
+  CardToken string `json:"card_token"`
+  Duration int `json:"duration"`
+  ID string `json:"id"`
+  Name string `json:"name"`
+  Popularity interface{} `json:"popularity"`
+  ResolveType string `json:"resolve_type"`
+  Score int `json:"score"`
+  SpokenName string `json:"spoken_name"`
+  StreamURL string `json:"stream_url"`
+  Type string `json:"type"`
+  Value string `json:"value"`
+>>>>>>> d4806ae4bd1fc780a8b5ba23aeda5bc30557e1dc
 }
 
 // Default Render Handler
 func TrackHandler(w http.ResponseWriter, r *http.Request) {
+<<<<<<< HEAD
 	//// TEST ENTITY ////
 	myArtist := Artist{
 		"1234",
@@ -101,16 +145,78 @@ func TrackHandler(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Fatal("Could not marshal transformed simplejson")
 	}
+=======
+  //// TEST ENTITY ////
+  myArtist := Artist{
+    "1234",
+    "1234",
+    "http://www.example.com/01",
+    "Adele",
+    0.8,
+    "music_artist",
+    "Adele",
+  }
+  myAlbum := Album{
+    &myArtist,
+    "2468",
+    "2468",
+    "http://www.example.com/02",
+    "Hello",
+    "music_album",
+    "Hello",
+  }
+  myTrackEntity := TrackEntity{
+    &myAlbum,
+    "song",
+    "1357",
+    290,
+    "1357",
+    "Hello",
+    nil,
+    "context",
+    0,
+    "Hello by Adele",
+    "http://www.example.com/03",
+    "music_track",
+    "Hello by Adele",
+  }
+	TrackJson, err := json.Marshal(myTrackEntity)
+	if err != nil { 
+    log.Fatal("Track object could not be converted to JSON format")
+	}
+  trackSimple, err := simplejson.NewJson(TrackJson)
+  if err != nil { 
+    log.Fatal("TrackJSON object could not be converted to simpleJSON format")
+  }
+  trackKazaam, err := kz.NewKazaam(`[{"operation":"shift", "spec": {"cardToken":"album.card_token","audioUrl":"stream_url","subtitle1":"album.artist.name","subtitle2":"album.name","title":"name","backgroundImageUrl":"album.image","extraData.trackInfo.durationInSeconds":"duration"}},{"operation":"default","spec": {"extraDataUrl":"http://www.example.com/04"}}]`)
+  if err != nil {
+    log.Fatal("Could not create new Kazaam instance")
+  }
+
+  transformedSimple, err := trackKazaam.Transform(trackSimple)
+  if err != nil {
+    log.Fatal("Could not transform simplejson")
+  }
+  transformedWriteable, err := transformedSimple.Encode()
+  if err != nil {
+    log.Fatal("Could not marshal transformed simplejson")
+  }
+>>>>>>> d4806ae4bd1fc780a8b5ba23aeda5bc30557e1dc
 	w.Header().Set("Content-Type", "application/json")
 
 	_, err = w.Write(transformedWriteable)
 	if err != nil {
+<<<<<<< HEAD
 		log.Fatal("broken")
+=======
+    log.Fatal("broken")
+>>>>>>> d4806ae4bd1fc780a8b5ba23aeda5bc30557e1dc
 	}
 }
 
 func main() {
 
+<<<<<<< HEAD
 	http.HandleFunc("/", TrackHandler)
 	http.ListenAndServe(":8000", nil)
 }
@@ -125,6 +231,24 @@ var transforms = map[string]string{
 	"backgroundImageUrl":                    "entity.album.image",
 	"extraDataUrl":                          "http://www.music.com",
 	"extraData.trackInfo.durationInSeconds": "entity.duration",
+=======
+  http.HandleFunc("/", TrackHandler)
+  http.ListenAndServe(":8000", nil)
+}
+
+
+
+///// TRANSFORMATIONS /////
+var transforms = map[string]string{
+	"cardToken":                             "entity.album.card_token", 
+	"audioUrl":                              "entity.stream_url",        
+	"subtitle1":                             "entity.album.artist.name", 
+	"subtitle2":                             "entity.album.name",        
+	"title":                                 "entity.name",              
+	"backgroundImageUrl":                    "entity.album.image",      
+	"extraDataUrl":                          "http://www.music.com",     
+	"extraData.trackInfo.durationInSeconds": "entity.duration",         
+>>>>>>> d4806ae4bd1fc780a8b5ba23aeda5bc30557e1dc
 }
 
 /*
