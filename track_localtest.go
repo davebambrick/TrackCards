@@ -2,10 +2,11 @@ package main
 
 import (
 	"encoding/json"
-	simplejson "github.com/bitly/go-simplejson"
-	kz "gopkg.in/qntfy/kazaam.v2"
 	"log"
 	"net/http"
+
+	simplejson "github.com/bitly/go-simplejson"
+	kz "gopkg.in/qntfy/kazaam.v2"
 )
 
 type Artist struct {
@@ -44,7 +45,7 @@ type TrackEntity struct {
 	Value          string      `json:"value"`
 }
 
-// Default Render Handler
+// Track Handler
 func TrackHandler(w http.ResponseWriter, r *http.Request) {
 	//// TEST ENTITY ////
 	myArtist := Artist{
@@ -97,11 +98,11 @@ func TrackHandler(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Fatal("Could not transform simplejson")
 	}
-	transformedWriteable, err := transformedSimple.Encode()
+	transformedWriteable, err := transformedSimple.EncodePretty()
 	if err != nil {
 		log.Fatal("Could not marshal transformed simplejson")
 	}
-  
+
 	w.Header().Set("Content-Type", "application/json")
 
 	_, err = w.Write(transformedWriteable)
@@ -117,16 +118,14 @@ func main() {
 
 ///// TRANSFORMATIONS /////
 var transforms = map[string]string{
-	"cardToken":                             "entity.album.card_token",
-	"audioUrl":                              "entity.stream_url",
-	"subtitle1":                             "entity.album.artist.name",
-	"subtitle2":                             "entity.album.name",
-	"title":                                 "entity.name",
-	"backgroundImageUrl":                    "entity.album.image",
-	"extraDataUrl":                          "http://www.music.com",
-	"extraData.trackInfo.durationInSeconds": "entity.duration",
+	"cardToken":                             "album.card_token",
+	"audioUrl":                              "stream_url",
+	"subtitle1":                             "album.artist.name",
+	"subtitle2":                             "album.name",
+	"title":                                 "name",
+	"backgroundImageUrl":                    "album.image",
+	"extraData.trackInfo.durationInSeconds": " duration",
 }
-
 
 /*
 "entity": {
