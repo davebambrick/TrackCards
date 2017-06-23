@@ -7,7 +7,7 @@ import (
 
 // Default Render Handler
 func Default(w http.ResponseWriter, r *http.Request) {
-  object := DefaultObject{Value: "Hello World"}
+	object := DefaultObject{Value: "Hello World"}
 	body, err := json.Marshal(object)
 	if err != nil {
 

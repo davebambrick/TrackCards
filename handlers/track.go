@@ -2,7 +2,6 @@ package handlers
 
 import (
 	"encoding/json"
-	kz "gopkg.in/qntfy/kazaam.v2"
 	"net/http"
 )
 

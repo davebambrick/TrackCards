@@ -1,7 +1,7 @@
 package main
 
 import (
-  "go/build"
+	"go/build"
 	"log"
 	"os"
 	"time"
@@ -12,7 +12,6 @@ import (
 
 	"path/filepath"
 
-	"github.com/bshuster-repo/logrus-logstash-hook"
 	"github.com/gorilla/mux"
 	"github.com/iAmPlus/TrackCards/handlers"
 	negronilogrus "github.com/iAmPlus/negroni-logrus"
@@ -32,8 +31,8 @@ func attachProfiler(router *mux.Router) {
 }
 
 func attachHandlers(router *mux.Router) {
-						router.HandleFunc("/health", handlers.Health)
-			}
+	router.HandleFunc("/health", handlers.Health)
+}
 
 func main() {
 	router, n, recovery, logger := mux.NewRouter().StrictSlash(true), negroni.New(), negroni.NewRecovery(), logrus.New()
