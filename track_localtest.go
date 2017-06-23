@@ -91,7 +91,7 @@ func TrackHandler(w http.ResponseWriter, r *http.Request) {
 	///////////////////////////////////////////////////////
 
 	// In the final version, the entity will be pulled from the request,
-	// so we won't have to do this 2-step conversion
+	// so we won't have to do this 2-step type conversion
 
 	myTrackJson, _ := json.Marshal(myTrackEntity)       // Convert entity to json
 	myTrackSimple, _ := simplejson.NewJson(myTrackJson) // Convert json to simplejson
