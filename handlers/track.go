@@ -12,7 +12,6 @@ import (
 
 func TrackHandler(w http.ResponseWriter, r *http.Request) {
 
-	///////////////////////////////////////////////////////
 	defer r.Body.Close()
 
 	trackJson, _ := ioutil.ReadAll(r.Body) // Read target entity from request body
