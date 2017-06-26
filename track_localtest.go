@@ -4,9 +4,8 @@ import (
 	"encoding/json"
 	"log"
 	"net/http"
-
-	simplejson "github.com/bitly/go-simplejson"
 	tf "github.com/davebambrick/TrackCards/format"
+
 )
 
 //// TEST OBJECT TYPES ////////////////////////////////
@@ -93,12 +92,10 @@ func TrackHandler(w http.ResponseWriter, r *http.Request) {
 	// In the final version, the entity will be pulled from the request,
 	// so we won't have to do this 2-step type conversion
 
-	myTrackJson, _ := json.Marshal(myTrackEntity)       // Convert entity to json
-	myTrackSimple, _ := simplejson.NewJson(myTrackJson) // Convert json to simplejson
+	myTrackJson, _ := json.Marshal(myTrackEntity) // Convert entity to json
 
-	specList := tf.BuildSpecList(tf.TransformLibrary["Track"])  // Build spec list string
-	transformed, _ := tf.TransformJSON(myTrackSimple, specList) // Transform w/ loaded Kazaam object
-	writeable, _ := transformed.EncodePretty()                  // Encode as json for test printing
+	specList := tf.BuildSpecList(tf.TransformLibrary["Track"]) // Build spec list string
+	writeable, _ := tf.TransformJSON(myTrackJson, specList)  // Transform w/ loaded Kazaam object
 
 	w.Header().Set("Content-Type", "application/json")
 
