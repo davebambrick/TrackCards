@@ -122,10 +122,9 @@ func BuildSpecList(stringType string) (string, error) {
 
 func TransformJSON(entity []byte, specList string) ([]byte, error) {
 	/*
-		TransformJSON takes in an entity to be transformed, converts it to a
-		simplejson.Json format, applies a Kazaam transformation to it in accordance
-		with the provided specList, and returns a pointer to a new transformed
-		simplejson.Json object.
+		TransformJSON takes in a json entity to be transformed, applies a Kazaam
+		transformation to it in accordance with the provided specList string, and
+		returns the new transformed json object.
 
 		Args:
 			entity (interface{}): entity to be converted to simplejson.Json and
@@ -134,7 +133,7 @@ func TransformJSON(entity []byte, specList string) ([]byte, error) {
 			as supplied by BuildSpecList
 
 		Returns:
-			*simplejson.Json pointing to a new transformation of the original entity input
+			transformation of the original entity json object as a slice of bytes
 
 	*/
 
