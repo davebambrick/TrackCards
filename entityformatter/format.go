@@ -17,6 +17,8 @@ type Operation struct {
 	Specs Specs
 }
 
+///////////////////////////////////////////
+
 var TransformLibrary = map[string][]Operation{
 	"music_track": []Operation{
 		Operation{
@@ -109,8 +111,7 @@ func BuildSpecList(stringType string) (string, error) {
 	*/
 
 	var specList string
-	ops := TransformLibrary[stringType]
-	for _, op := range ops {
+	for _, op := range TransformLibrary[stringType] {
 		parsed, err := SpecParser(op)
 		if err != nil {
 			log.Fatal(err)
