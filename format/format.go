@@ -6,8 +6,7 @@ import (
 	"log"
 	"strings"
 
-	simplejson "github.com/bitly/go-simplejson"
-	kz "gopkg.in/qntfy/kazaam.v2"
+	kz "gopkg.in/qntfy/kazaam.v3"
 )
 
 //// Formatter Object Types //////////////
@@ -47,11 +46,9 @@ func SpecParser(op Operation) (string, error) {
 	/*
 		SpecParser takes the specifications of a given Operation Object,
 		parses the specifications, and returns a string formatted as json.
-
 		Args:
 			opType (string): type of operation to eventually be performed by Kazaam
 			spec (Specs): map[string]interface{} of operation-specific fields to their parameters
-
 		Returns:
 			json-formatted string of specifications according to operation-specific format
 	*/
@@ -99,12 +96,10 @@ func BuildSpecList(ops []Operation) string {
 		BuildSpecList takes in a slice of Operations (type struct) and constructs a
 		stringified list of operation specs formatted as json. Makes calls to
 		SpecParser for each operation.
-
 		Args:
 			ops ([]Operation): slice of Operation objects (type struct) where each
 			Operation contains its operation type (type string) and specifications
 			(type map[string]interface{})
-
 		Returns:
 			stringified list of json-formatted operation specs
 	*/
@@ -120,33 +115,30 @@ func BuildSpecList(ops []Operation) string {
 	return fmt.Sprintf("[%s]", strings.Trim(specList, ", "))
 }
 
-func TransformJSON(entity *simplejson.Json, specList string) (*simplejson.Json, error) {
+func TransformJSON(entity []byte, specList string) ([]byte, error) {
 	/*
 		TransformJSON takes in an entity to be transformed, converts it to a
 		simplejson.Json format, applies a Kazaam transformation to it in accordance
 		with the provided specList, and returns a pointer to a new transformed
 		simplejson.Json object.
-
 		Args:
 			entity (interface{}): entity to be converted to simplejson.Json and
 			transformed via a Kazaam object
 			specList (string): stringified list of json-formatted operation specifications,
 			as supplied by BuildSpecList
-
 		Returns:
 			*simplejson.Json pointing to a new transformation of the original entity input
-
 	*/
 
 	testKazaam, err := kz.NewKazaam(specList)
 	if err != nil {
-		return simplejson.New(), err
+		return  err
 	}
 
-	transformedSimple, err := testKazaam.Transform(entity)
+	transformedJson, err := testKazaam.Transform(entity)
 	if err != nil {
-		return simplejson.New(), err
+		return err
 	}
 
-	return transformedSimple, nil
+	return transformedJson, err
 }
