@@ -29,13 +29,13 @@ func TrackHandler(w http.ResponseWriter, r *http.Request) {
 
 	defer r.Body.Close()
 
-	trackJson, _ := ioutil.ReadAll(r.Body) // Read target entity from request body
+	trackJSON, _ := ioutil.ReadAll(r.Body) // Read target entity from request body
 
-	trackSimple, _ := sj.NewJson(trackJson)           // Transform to simplejson to access entity type
+	trackSimple, _ := sj.NewJson(trackJSON)           // Transform to simplejson to access entity type
 	entityType, _ := trackSimple.Get("type").Encode() // Pull entity type from simplejson
 
 	specList, _ := ef.BuildSpecList(strings.Trim(string(entityType), " \"")) // Pass entity type into spec builder, build spec list string
-	transformed, _ := ef.TransformJSON(trackJson, specList)                  // Transform w/ loaded Kazaam object
+	transformed, _ := ef.TransformJSON(trackJSON, specList)                  // Transform w/ loaded Kazaam object
 
 	w.Header().Set("Content-Type", "application/json")
 	_, err := w.Write(transformed)
