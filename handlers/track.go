@@ -4,6 +4,7 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"strings"
 
 	sj "github.com/bitly/go-simplejson"
 	ef "github.com/davebambrick/TrackCards/entityformatter"
@@ -38,7 +39,7 @@ func TrackHandler(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	specList, err := ef.BuildSpecList(string(entityType)) // Pass entity type into spec builder, build spec list string
+	specList, err := ef.BuildSpecList(strings.Trim(string(entityType), "\"")) // Pass entity type into spec builder, build spec list string
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -46,7 +47,6 @@ func TrackHandler(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Fatal(err)
 	}
-
 	w.Header().Set("Content-Type", "application/json")
 	_, err = w.Write(transformed)
 	if err != nil {

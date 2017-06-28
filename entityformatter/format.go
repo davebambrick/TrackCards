@@ -29,23 +29,32 @@ type Operation struct {
 // as strings are mapped to a sequence (slice) of Operation objects
 // representing the complete transformation to be performed by Kazaam.
 var TransformLibrary = map[string][]Operation{
-	"\"music_track\"": []Operation{
+	"music_track": []Operation{
+		Operation{
+			"concat",
+			Specs{
+				"sources": []map[string]string{
+					{"value": "http:/"},
+					{"value": "host_goes_here"},
+					{"value": "track"},
+					{"path": "album.artist.id"},
+					{"path": "id"},
+				},
+				"targetPath": "extraDataUrl",
+				"delim":      "/",
+			},
+		},
 		Operation{
 			"shift",
 			Specs{
-				"cardToken":                             "album.card_token",
+				"cardToken":                             "id",
 				"audioUrl":                              "stream_url",
 				"subtitle1":                             "album.artist.name",
 				"subtitle2":                             "album.name",
 				"title":                                 "name",
 				"backgroundImageUrl":                    "album.image",
 				"extraData.trackInfo.durationInSeconds": "duration",
-			},
-		},
-		Operation{
-			"default",
-			Specs{
-				"extraDataUrl": "http://www.example_url.com/03",
+				"extraDataUrl":                          "extraDataUrl",
 			},
 		},
 	},
@@ -77,8 +86,10 @@ func SpecParser(op Operation) (string, error) {
 			switch specField {
 			case "sources": // specValue is a list of values to be concatenated
 				var concatString string
-				for location, concat := range specVal.(map[string]string) {
-					concatString += fmt.Sprintf("{\"%s\": \"%s\"}, ", location, concat)
+				for _, concat := range specVal.([]map[string]string) {
+					for k, v := range concat {
+						concatString += fmt.Sprintf("{\"%s\":\"%s\"}, ", k, v)
+					}
 				}
 				specString += fmt.Sprintf("\"%s\": [%s], ", specField, strings.Trim(concatString, ", "))
 			default:
